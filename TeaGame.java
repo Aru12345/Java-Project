@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Enumeration;
 
-class TeaProgram {
+
+class TeaGame {
     public static void main(String[] args) {
         MyWindow window = new MyWindow();
         window.setTitle("CSCIE-10B Final Project");
@@ -35,6 +37,11 @@ class MyWindow extends JFrame {
     String[] teaTypes = { "Matcha (抹茶)", "Gyokuro (玉露)", "Hatsugama (初釜)" }; // Data Struture used to store tea-types
 
     JButton startButton = new JButton("Start");
+    ButtonGroup optionGroup;
+    ButtonGroup levelButtons = new ButtonGroup();
+    JRadioButton levelButton1 = new JRadioButton("Easy");
+    JRadioButton levelButton2 = new JRadioButton("Medium");
+    JRadioButton levelButton3 = new JRadioButton("Hard");
 
     public MyWindow() {
         layOutComponents();
@@ -79,7 +86,7 @@ class MyWindow extends JFrame {
         secondBody.add(teaPrep);
         secondBody.setLayout(new BoxLayout(secondBody, BoxLayout.Y_AXIS));
 
-        ButtonGroup optionGroup = new ButtonGroup();
+         optionGroup = new ButtonGroup();
         for (int i = 0; i < teaTypes.length; i++) {
             JRadioButton radioButton = new JRadioButton(teaTypes[i]);
 
@@ -96,10 +103,7 @@ class MyWindow extends JFrame {
         levelMsg.setBorder(BorderFactory.createEmptyBorder(5, 20, 20, 20));
         secondBody.add(levelMsg);
 
-        ButtonGroup levelButtons = new ButtonGroup();
-        JRadioButton levelButton1 = new JRadioButton("Easy");
-        JRadioButton levelButton2 = new JRadioButton("Medium");
-        JRadioButton levelButton3 = new JRadioButton("Hard");
+       
 
         levelButton1.setFont(font);
         levelButton1.setForeground(Color.white);
@@ -160,5 +164,41 @@ class MyWindow extends JFrame {
 
             }
         });
+
+        startButton.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        // Retrieve the selected tea type
+       
+
+        // Retrieve the selected preparation level
+        String selectedLevel = null;
+        if (levelButton1.isSelected()) {
+            selectedLevel = "Easy";
+        } else if (levelButton2.isSelected()) {
+            selectedLevel = "Medium";
+        } else if (levelButton3.isSelected()) {
+            selectedLevel = "Hard";
+        }
+
+        // Check if both tea type and preparation level have been selected
+        if ( selectedLevel != null) {
+            // Display a message or perform actions based on the selected options
+            JLabel choosen =new JLabel("Starting preparation of " +  " at " + selectedLevel + " level.");
+            secondBody.add(choosen);
+            secondBody.revalidate();
+        secondBody.repaint();
+            // You can add further actions here, such as displaying preparation steps or starting a timer, etc.
+        } else {
+            // If either tea type or preparation level is not selected, display an error message
+             JLabel errorMsg = new JLabel("Sorry something went wrong.Please Select a tea type and a level.");
+              secondBody.add(errorMsg);
+              secondBody.revalidate();
+               secondBody.repaint();
+               errorMsg.setForeground(Color.white);
+               errorMsg.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 20));
+        }
+    }
+});
+
     }
 }
