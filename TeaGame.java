@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Enumeration;
-
+import java.util.List;
 
 class TeaGame {
     public static void main(String[] args) {
@@ -86,7 +86,7 @@ class MyWindow extends JFrame {
         secondBody.add(teaPrep);
         secondBody.setLayout(new BoxLayout(secondBody, BoxLayout.Y_AXIS));
 
-         optionGroup = new ButtonGroup();
+        optionGroup = new ButtonGroup();
         for (int i = 0; i < teaTypes.length; i++) {
             JRadioButton radioButton = new JRadioButton(teaTypes[i]);
 
@@ -97,13 +97,11 @@ class MyWindow extends JFrame {
             optionGroup.add(radioButton);
             secondBody.add(radioButton);
         }
-      
+
         levelMsg.setFont(font);
         levelMsg.setForeground(new Color(220, 220, 220));
         levelMsg.setBorder(BorderFactory.createEmptyBorder(5, 20, 20, 20));
         secondBody.add(levelMsg);
-
-       
 
         levelButton1.setFont(font);
         levelButton1.setForeground(Color.white);
@@ -116,7 +114,7 @@ class MyWindow extends JFrame {
         levelButton3.setFont(font);
         levelButton3.setForeground(Color.white);
         levelButton3.setBorder(BorderFactory.createEmptyBorder(5, 20, 10, 20));
-        
+
         levelButtons.add(levelButton1);
         levelButtons.add(levelButton2);
         levelButtons.add(levelButton3);
@@ -125,8 +123,6 @@ class MyWindow extends JFrame {
         secondBody.add(levelButton2);
         secondBody.add(levelButton3);
         secondBody.add(startButton);
-
-        
 
         body.add(inputName);
         heading.add(welcome);
@@ -166,39 +162,80 @@ class MyWindow extends JFrame {
         });
 
         startButton.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-        // Retrieve the selected tea type
-       
+            public void actionPerformed(ActionEvent e) {
+                // Retrieve the selected tea type
+                String selectedTeaType = null;
+                for (Enumeration<AbstractButton> buttons = optionGroup.getElements(); buttons.hasMoreElements();) {
+                    AbstractButton button = buttons.nextElement();
+                    if (button.isSelected()) {
+                        selectedTeaType = button.getText();
+                        break;
+                    }
+                }
 
-        // Retrieve the selected preparation level
-        String selectedLevel = null;
+                // Retrieve the selected preparation level
+                String selectedLevel = null;
+                if (levelButton1.isSelected()) {
+                    selectedLevel = "Easy";
+                } else if (levelButton2.isSelected()) {
+                    selectedLevel = "Medium";
+                } else if (levelButton3.isSelected()) {
+                    selectedLevel = "Hard";
+                }
+
+                // Check if both tea type and preparation level have been selected
+                if (selectedLevel != null) {
+                    if (selectedTeaType.equals("Matcha (抹茶)")) {
+                        Matcha matcha = new Matcha("History of Matcha", "Overview of Matcha");
+                        displayMatchaInfo(matcha);
+                    } else if (selectedTeaType.equals("Gyokuro (玉露)")) {
+                        // Handle Gyokuro tea
+                    } else if (selectedTeaType.equals("Hatsugama (初釜)")) {
+                        // Handle Hatsugama tea
+                    }
+                } else {
+                    // If either tea type or preparation level is not selected, display an error
+                    // message
+                    JLabel errorMsg = new JLabel("Sorry something went wrong.Please Select a tea type and a level.");
+                    secondBody.add(errorMsg);
+                    secondBody.revalidate();
+                    secondBody.repaint();
+                    errorMsg.setForeground(Color.white);
+                    errorMsg.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 20));
+                }
+            }
+        });
+
+    }
+
+    private void displayMatchaInfo(Matcha matcha) {
+        // Display Matcha information
+        JLabel historyLabel = new JLabel("History: " + matcha.getHistory());
+        JLabel overviewLabel = new JLabel("Overview: " + matcha.getOverview());
+
+        // Add history and overview labels to the secondBody panel
+        secondBody.add(historyLabel);
+        secondBody.add(overviewLabel);
+
+        // Retrieve and display questions based on the selected difficulty level
+        int difficultyLevel = 0;
         if (levelButton1.isSelected()) {
-            selectedLevel = "Easy";
+            difficultyLevel = 1;
         } else if (levelButton2.isSelected()) {
-            selectedLevel = "Medium";
+            difficultyLevel = 2;
         } else if (levelButton3.isSelected()) {
-            selectedLevel = "Hard";
+            difficultyLevel = 3;
         }
 
-        // Check if both tea type and preparation level have been selected
-        if ( selectedLevel != null) {
-            // Display a message or perform actions based on the selected options
-            JLabel choosen =new JLabel("Starting preparation of " +  " at " + selectedLevel + " level.");
-            secondBody.add(choosen);
-            secondBody.revalidate();
+        List<String> questions = matcha.getQuestions(difficultyLevel);
+        if (questions != null) {
+            for (String question : questions) {
+                JLabel questionLabel = new JLabel(question);
+                secondBody.add(questionLabel);
+            }
+        }
+
+        secondBody.revalidate();
         secondBody.repaint();
-            // You can add further actions here, such as displaying preparation steps or starting a timer, etc.
-        } else {
-            // If either tea type or preparation level is not selected, display an error message
-             JLabel errorMsg = new JLabel("Sorry something went wrong.Please Select a tea type and a level.");
-              secondBody.add(errorMsg);
-              secondBody.revalidate();
-               secondBody.repaint();
-               errorMsg.setForeground(Color.white);
-               errorMsg.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 20));
-        }
-    }
-});
-
-    }
+    };
 }
