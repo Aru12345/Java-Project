@@ -20,6 +20,8 @@ class MyWindow extends JFrame {
     JPanel heading = new JPanel();
     JPanel body = new JPanel();
     JPanel secondBody = new JPanel();
+    JPanel thirdBody = new JPanel();
+    JScrollPane scrollPane = new JScrollPane(thirdBody);
 
     JPanel inputName = new JPanel();
 
@@ -62,6 +64,8 @@ class MyWindow extends JFrame {
         // start.setBackground(new Color(50, 100, 50));
         body.setBackground(new Color(0, 158, 96));
         secondBody.setBackground(new Color(0, 158, 96));
+        thirdBody.setBackground(new Color(0, 158, 96));
+        thirdBody.setForeground(Color.white);
 
         inputName.add(ask);
         inputName.add(box);
@@ -128,7 +132,10 @@ class MyWindow extends JFrame {
         heading.add(welcome);
 
         start.add(heading);
-        // start.add(body);
+
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.add(scrollPane, BorderLayout.CENTER);
+        // thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
 
         this.add(start, BorderLayout.NORTH);
         this.add(body, BorderLayout.CENTER);
@@ -210,12 +217,29 @@ class MyWindow extends JFrame {
 
     private void displayMatchaInfo(Matcha matcha) {
         // Display Matcha information
-        JLabel historyLabel = new JLabel("History: " + matcha.getHistory());
-        JLabel overviewLabel = new JLabel("Overview: " + matcha.getOverview());
+        JLabel historyLabel = new JLabel(
+                "<html><p style='height: 400px;'>History: " + matcha.getHistory() + "</p></html>");
+        historyLabel.setVerticalAlignment(SwingConstants.TOP);
+        historyLabel.setVerticalTextPosition(SwingConstants.TOP);
+        historyLabel.setForeground(Color.white);
 
-        // Add history and overview labels to the secondBody panel
-        secondBody.add(historyLabel);
-        secondBody.add(overviewLabel);
+        JLabel overviewLabel = new JLabel("<html>Overview: " + matcha.getOverview() + "</html>");
+        overviewLabel.setVerticalAlignment(SwingConstants.TOP);
+        overviewLabel.setVerticalTextPosition(SwingConstants.TOP);
+        overviewLabel.setForeground(Color.white);
+
+        // Adjust the width of the labels dynamically
+        Dimension preferredSize = historyLabel.getPreferredSize();
+        int width = preferredSize.width > 500 ? 500 : preferredSize.width;
+        historyLabel.setPreferredSize(new Dimension(width, preferredSize.height));
+
+        preferredSize = overviewLabel.getPreferredSize();
+        width = preferredSize.width > 500 ? 500 : preferredSize.width;
+        overviewLabel.setPreferredSize(new Dimension(width, preferredSize.height));
+
+        // Add history and overview labels to the thirdBody panel
+        thirdBody.add(historyLabel);
+        thirdBody.add(overviewLabel);
 
         // Retrieve and display questions based on the selected difficulty level
         int difficultyLevel = 0;
@@ -228,14 +252,32 @@ class MyWindow extends JFrame {
         }
 
         List<String> questions = matcha.getQuestions(difficultyLevel);
-        if (questions != null) {
-            for (String question : questions) {
-                JLabel questionLabel = new JLabel(question);
-                secondBody.add(questionLabel);
+        List<List<String>> options = matcha.getOptions(difficultyLevel);
+        if (questions != null && options != null && questions.size() == options.size()) {
+            for (int i = 0; i < questions.size(); i++) {
+                JLabel questionLabel = new JLabel(questions.get(i));
+                thirdBody.add(questionLabel);
+
+                ButtonGroup optionGroup = new ButtonGroup();
+                for (String option : options.get(i)) {
+                    JRadioButton radioButton = new JRadioButton(option);
+                    optionGroup.add(radioButton);
+                    thirdBody.add(radioButton);
+                }
             }
         }
 
-        secondBody.revalidate();
-        secondBody.repaint();
-    };
+        // Update the layout of the thirdBody panel
+        thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
+
+        // Add the thirdBody panel to the scrollPane
+        scrollPane.setViewportView(thirdBody);
+
+        getContentPane().remove(secondBody); // Remove the secondBody panel
+        getContentPane().add(scrollPane, BorderLayout.CENTER); // Add the scrollPane to the center
+        revalidate(); // Re-layout components
+        repaint();
+        personalMsg.setText("Hi 👋 " + userName + "!");
+    }
+
 }

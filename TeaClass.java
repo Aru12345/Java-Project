@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class TeaClass {
+abstract class TeaClass {
     protected String history;
     protected String overview;
 
@@ -36,8 +36,8 @@ class Matcha extends TeaClass {
     public Matcha(String history, String overview) {
         super(history, overview);
 
-        this.history = "This is the history";
-        this.overview = "It originated here";
+        this.history = "Matcha's history is deeply intertwined with Japanese culture and tradition, and its journey from ancient China to modern-day global popularity reflects its enduring appeal and significance.\nToday, matcha continues to be an integral part of Japanese culture and cuisine. It is used in various traditional tea ceremonies, as well as in modern culinary creations such as matcha lattes, desserts, and savory dishes.";
+        this.overview = "Japanese Matcha Tea is often made by sifting Matcha with a traditional Japanese Spoon.3000 milligrams.Matcha is whisked in a zig-zag manner in 176 fahrenheint.You can add your favourite sweetner to your tea.! ";
 
         initializeEasyQuestions();
         initializeEasyOptions();
