@@ -22,6 +22,8 @@ abstract class TeaClass {
 
     public abstract List<List<String>> getOptions(int difficultyLevel);
 
+    public abstract List<Integer> getCorrectAnswers(int difficultyLevel);
+
 }
 
 class Matcha extends TeaClass {
@@ -69,9 +71,9 @@ class Matcha extends TeaClass {
         easyOptions.add(q2Options);
 
         List<String> q3Options = new ArrayList<>();
-        q2Options.add("Grape Juice");
-        q2Options.add("Soda and Ice");
-        q2Options.add("Water and Milk");// Correct answer
+        q3Options.add("Grape Juice");
+        q3Options.add("Soda and Ice");
+        q3Options.add("Water and Milk");// Correct answer
         easyOptions.add(q3Options);
     }
 
@@ -155,15 +157,15 @@ class Matcha extends TeaClass {
         difficultOptions.add(q3Options);
 
         List<String> q4Options = new ArrayList<>();
-        q4Options.add("Side to side s"); // Correct answer
+        q4Options.add("Side to side "); // Correct answer
         q4Options.add("Shake the container upside down");
         q4Options.add("Add some milk then whisk");
         difficultOptions.add(q4Options);
 
         List<String> q5Options = new ArrayList<>();
-        q4Options.add("Taste turns sweeter");
-        q4Options.add("Foam Layer at top");// Correct
-        q4Options.add("Thick Mixture");
+        q5Options.add("Taste turns sweeter");
+        q5Options.add("Foam Layer at top");// Correct
+        q5Options.add("Thick Mixture");
         difficultOptions.add(q5Options);
 
         List<String> q6Options = new ArrayList<>();
@@ -206,4 +208,35 @@ class Matcha extends TeaClass {
                 return null;
         }
     }
+
+    public List<Integer> getCorrectAnswers(int difficultyLevel) {
+        List<Integer> correctAnswers = new ArrayList<>();
+        switch (difficultyLevel) {
+            case 1:
+                correctAnswers.add(0);
+                correctAnswers.add(0);
+                correctAnswers.add(2);
+                break;
+            case 2:
+                correctAnswers.add(0);
+                correctAnswers.add(2);
+                correctAnswers.add(0);
+                correctAnswers.add(1);
+                correctAnswers.add(2);
+                break;
+            case 3:
+                correctAnswers.add(0);
+                correctAnswers.add(2); // Index of correct answer in difficult questions
+                correctAnswers.add(2); // Index of correct answer in difficult questions
+                correctAnswers.add(0); // Index of correct answer in difficult questions
+                correctAnswers.add(1); // Index of correct answer in difficult questions
+                correctAnswers.add(1); // Index of correct answer in difficult questions
+                correctAnswers.add(2); // Index of correct answer in difficult questions
+                break;
+            default:
+                break;
+        }
+        return correctAnswers;
+    }
+
 }

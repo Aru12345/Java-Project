@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.ArrayList;
 
 class TeaGame {
     public static void main(String[] args) {
@@ -21,6 +22,7 @@ class MyWindow extends JFrame {
     JPanel body = new JPanel();
     JPanel secondBody = new JPanel();
     JPanel thirdBody = new JPanel();
+    JPanel fourthBody = new JPanel(); // Add fourthBody panel
     JScrollPane scrollPane = new JScrollPane(thirdBody);
 
     JPanel inputName = new JPanel();
@@ -44,6 +46,12 @@ class MyWindow extends JFrame {
     JRadioButton levelButton1 = new JRadioButton("Easy");
     JRadioButton levelButton2 = new JRadioButton("Medium");
     JRadioButton levelButton3 = new JRadioButton("Hard");
+    JButton submitAnswer = new JButton("Submit");
+    JButton exit = new JButton("Exit");
+
+    private List<String> questions = new ArrayList<>(); // Initialize questions list
+    private List<ButtonGroup> optionGroups = new ArrayList<>(); // Initialize optionGroups list
+    private List<Integer> correctAnswers = new ArrayList<>(); // Initialize correctAnswers list
 
     public MyWindow() {
         layOutComponents();
@@ -137,8 +145,12 @@ class MyWindow extends JFrame {
         this.add(scrollPane, BorderLayout.CENTER);
         // thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
 
+        fourthBody.setLayout(new BoxLayout(fourthBody, BoxLayout.Y_AXIS));
+        fourthBody.setBackground(new Color(0, 158, 96));
+
         this.add(start, BorderLayout.NORTH);
         this.add(body, BorderLayout.CENTER);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void addActionsListeners() {
@@ -213,22 +225,47 @@ class MyWindow extends JFrame {
             }
         });
 
+        submitAnswer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int score = calculateScore();
+                // Display score on fourthBody panel
+                JLabel scoreLabel = new JLabel("Your score: " + score + " out of " + questions.size());
+                scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                scoreLabel.setForeground(Color.white);
+                scoreLabel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                fourthBody.add(scoreLabel);
+                fourthBody.add(exit);
+
+                getContentPane().remove(scrollPane); // Remove the scrollPane panel
+                getContentPane().add(fourthBody, BorderLayout.CENTER); // Add the fourthBody panel to the center
+                revalidate(); // Re-layout components
+                repaint();
+
+            }
+
+        });
+
+        exit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
     }
 
     private void displayMatchaInfo(Matcha matcha) {
-        // Display Matcha information
-        JLabel historyLabel = new JLabel(
-                "<html><p style='height: 400px;'>History: " + matcha.getHistory() + "</p></html>");
-        historyLabel.setVerticalAlignment(SwingConstants.TOP);
-        historyLabel.setVerticalTextPosition(SwingConstants.TOP);
+
+        // Display history label
+        JLabel historyLabel = new JLabel("History: " + matcha.getHistory());
         historyLabel.setForeground(Color.white);
+        historyLabel.setBorder(BorderFactory.createEmptyBorder(30, 13, 28, 25));
 
-        JLabel overviewLabel = new JLabel("<html>Overview: " + matcha.getOverview() + "</html>");
-        overviewLabel.setVerticalAlignment(SwingConstants.TOP);
-        overviewLabel.setVerticalTextPosition(SwingConstants.TOP);
+        // Display overview label
+        JLabel overviewLabel = new JLabel("Overview: " + matcha.getOverview());
         overviewLabel.setForeground(Color.white);
+        overviewLabel.setBorder(BorderFactory.createEmptyBorder(13, 13, 13, 25));
 
-        // Adjust the width of the labels dynamically
+        // Adjust label width
         Dimension preferredSize = historyLabel.getPreferredSize();
         int width = preferredSize.width > 500 ? 500 : preferredSize.width;
         historyLabel.setPreferredSize(new Dimension(width, preferredSize.height));
@@ -251,21 +288,24 @@ class MyWindow extends JFrame {
             difficultyLevel = 3;
         }
 
-        List<String> questions = matcha.getQuestions(difficultyLevel);
-        List<List<String>> options = matcha.getOptions(difficultyLevel);
-        if (questions != null && options != null && questions.size() == options.size()) {
+        questions = matcha.getQuestions(difficultyLevel);
+        optionGroups.clear();
+        correctAnswers = matcha.getCorrectAnswers(difficultyLevel);
+        if (questions != null) {
             for (int i = 0; i < questions.size(); i++) {
                 JLabel questionLabel = new JLabel(questions.get(i));
                 thirdBody.add(questionLabel);
 
                 ButtonGroup optionGroup = new ButtonGroup();
-                for (String option : options.get(i)) {
+                optionGroups.add(optionGroup);
+                for (String option : matcha.getOptions(difficultyLevel).get(i)) {
                     JRadioButton radioButton = new JRadioButton(option);
                     optionGroup.add(radioButton);
                     thirdBody.add(radioButton);
                 }
             }
         }
+        thirdBody.add(submitAnswer);
 
         // Update the layout of the thirdBody panel
         thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
@@ -280,4 +320,27 @@ class MyWindow extends JFrame {
         personalMsg.setText("Hi 👋 " + userName + "!");
     }
 
-}
+    private int calculateScore() {
+        int score = 0;
+        int questionIndex = 0;
+        for (int i = 0; i < questions.size(); i++) {
+            // Get the selected option for the current question
+            ButtonGroup optionGroup = optionGroups.get(questionIndex);
+            Enumeration<AbstractButton> buttons = optionGroup.getElements();
+            int selectedOptionIndex = 0;
+            while (buttons.hasMoreElements()) {
+                AbstractButton button = buttons.nextElement();
+                if (button.isSelected()) {
+                    break;
+                }
+                selectedOptionIndex++;
+            }
+            // Check if the selected option is correct
+            if (selectedOptionIndex == correctAnswers.get(questionIndex)) {
+                score++;
+            }
+            questionIndex++;
+        }
+        return score;
+    }
+};
