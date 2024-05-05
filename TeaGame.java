@@ -38,7 +38,7 @@ class MyWindow extends JFrame {
     JLabel teaPrep = new JLabel("Please select a tea preparation 🍵");
     JLabel levelMsg = new JLabel("Please select a preparation level 🍵");
 
-    String[] teaTypes = { "Matcha (抹茶)", "Gyokuro (玉露)", "Hatsugama (初釜)" }; // Data Struture used to store tea-types
+    String[] teaTypes = { "Matcha (抹茶)", "Gyokuro (玉露)" }; // Data Struture used to store tea-types
 
     JButton startButton = new JButton("Start");
     ButtonGroup optionGroup;
@@ -208,10 +208,9 @@ class MyWindow extends JFrame {
                         Matcha matcha = new Matcha("History of Matcha", "Overview of Matcha");
                         displayMatchaInfo(matcha);
                     } else if (selectedTeaType.equals("Gyokuro (玉露)")) {
-                        // Handle Gyokuro tea
-                    } else if (selectedTeaType.equals("Hatsugama (初釜)")) {
-                        // Handle Hatsugama tea
-                    }
+                        Gyokuro gyokuro = new Gyokuro("History","Overview");
+                        displayGyokuroInfo(gyokuro);
+                    } 
                 } else {
                     // If either tea type or preparation level is not selected, display an error
                     // message
@@ -319,6 +318,77 @@ class MyWindow extends JFrame {
         repaint();
         personalMsg.setText("Hi 👋 " + userName + "!");
     }
+
+
+      private void displayGyokuroInfo(Gyokuro gyokuro) {
+
+        // Display history label
+        JLabel historyLabel = new JLabel("History: " + gyokuro.getHistory());
+        historyLabel.setForeground(Color.white);
+        historyLabel.setBorder(BorderFactory.createEmptyBorder(30, 13, 28, 25));
+
+        // Display overview label
+        JLabel overviewLabel = new JLabel("Overview: " + gyokuro.getOverview());
+        overviewLabel.setForeground(Color.white);
+        overviewLabel.setBorder(BorderFactory.createEmptyBorder(13, 13, 13, 25));
+
+        // Adjust label width
+        Dimension preferredSize = historyLabel.getPreferredSize();
+        int width = preferredSize.width > 500 ? 500 : preferredSize.width;
+        historyLabel.setPreferredSize(new Dimension(width, preferredSize.height));
+
+        preferredSize = overviewLabel.getPreferredSize();
+        width = preferredSize.width > 500 ? 500 : preferredSize.width;
+        overviewLabel.setPreferredSize(new Dimension(width, preferredSize.height));
+
+        // Add history and overview labels to the thirdBody panel
+        thirdBody.add(historyLabel);
+        thirdBody.add(overviewLabel);
+
+        // Retrieve and display questions based on the selected difficulty level
+        int difficultyLevel = 0;
+        if (levelButton1.isSelected()) {
+            difficultyLevel = 1;
+        } else if (levelButton2.isSelected()) {
+            difficultyLevel = 2;
+        } else if (levelButton3.isSelected()) {
+            difficultyLevel = 3;
+        }
+
+        questions = gyokuro.getQuestions(difficultyLevel);
+        optionGroups.clear();
+        correctAnswers = gyokuro.getCorrectAnswers(difficultyLevel);
+        if (questions != null) {
+            for (int i = 0; i < questions.size(); i++) {
+                JLabel questionLabel = new JLabel(questions.get(i));
+                thirdBody.add(questionLabel);
+
+                ButtonGroup optionGroup = new ButtonGroup();
+                optionGroups.add(optionGroup);
+                for (String option : gyokuro.getOptions(difficultyLevel).get(i)) {
+                    JRadioButton radioButton = new JRadioButton(option);
+                    optionGroup.add(radioButton);
+                    thirdBody.add(radioButton);
+                }
+            }
+        }
+        thirdBody.add(submitAnswer);
+
+        // Update the layout of the thirdBody panel
+        thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
+
+        // Add the thirdBody panel to the scrollPane
+        scrollPane.setViewportView(thirdBody);
+
+        getContentPane().remove(secondBody); // Remove the secondBody panel
+        getContentPane().add(scrollPane, BorderLayout.CENTER); // Add the scrollPane to the center
+        revalidate(); // Re-layout components
+        repaint();
+        personalMsg.setText("Hi 👋 " + userName + "!");
+    }
+
+
+
 
     private int calculateScore() {
         int score = 0;
