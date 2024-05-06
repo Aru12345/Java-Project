@@ -5,6 +5,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
 
+// The class demostrated a kind of a quiz game related to Japanese Tea.
 class TeaGame {
     public static void main(String[] args) {
         MyWindow window = new MyWindow();
@@ -14,10 +15,10 @@ class TeaGame {
     }
 }
 
+// The window object extends JFrame
 class MyWindow extends JFrame {
     JPanel start = new JPanel();
     boolean begin = true;
-
     JPanel heading = new JPanel();
     JPanel body = new JPanel();
     JPanel secondBody = new JPanel();
@@ -26,15 +27,13 @@ class MyWindow extends JFrame {
     JScrollPane scrollPane = new JScrollPane(thirdBody);
 
     JPanel inputName = new JPanel();
-
     JLabel welcome = new JLabel("Welcome to Japanese Tea Ceremony Simulator 🫖");
-
     JLabel ask = new JLabel("Hi! What is your name?");
     JTextField box = new JTextField();
     JButton enter = new JButton("Enter");
-
     String userName = "";
     JLabel personalMsg = new JLabel("");
+
     JLabel teaPrep = new JLabel("Please select a tea preparation 🍵");
     JLabel levelMsg = new JLabel("Please select a preparation level 🍵");
 
@@ -49,9 +48,9 @@ class MyWindow extends JFrame {
     JButton submitAnswer = new JButton("Submit");
     JButton exit = new JButton("Exit");
 
-    private List<String> questions = new ArrayList<>(); // Initialize questions list
-    private List<ButtonGroup> optionGroups = new ArrayList<>(); // Initialize optionGroups list
-    private List<Integer> correctAnswers = new ArrayList<>(); // Initialize correctAnswers list
+    private List<String> questions = new ArrayList<>(); 
+    private List<ButtonGroup> optionGroups = new ArrayList<>(); 
+    private List<Integer> correctAnswers = new ArrayList<>(); 
 
     public MyWindow() {
         layOutComponents();
@@ -59,6 +58,7 @@ class MyWindow extends JFrame {
     }
 
     private void layOutComponents() {
+
         start.setLayout(new BoxLayout(start, BoxLayout.Y_AXIS));
         Font font = new Font("Arial", Font.BOLD, 20);
         welcome.setFont(font);
@@ -69,7 +69,6 @@ class MyWindow extends JFrame {
         heading.setSize(5, 10);
         heading.setBackground(new Color(46, 139, 87));
 
-        // start.setBackground(new Color(50, 100, 50));
         body.setBackground(new Color(0, 158, 96));
         secondBody.setBackground(new Color(0, 158, 96));
         thirdBody.setBackground(new Color(0, 158, 96));
@@ -92,7 +91,6 @@ class MyWindow extends JFrame {
         teaPrep.setForeground(new Color(220, 220, 220));
         teaPrep.setBorder(BorderFactory.createEmptyBorder(5, 20, 20, 20));
 
-        // Tea Options
 
         secondBody.add(personalMsg);
         secondBody.add(teaPrep);
@@ -143,7 +141,6 @@ class MyWindow extends JFrame {
 
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.add(scrollPane, BorderLayout.CENTER);
-        // thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
 
         fourthBody.setLayout(new BoxLayout(fourthBody, BoxLayout.Y_AXIS));
         fourthBody.setBackground(new Color(0, 158, 96));
@@ -153,8 +150,9 @@ class MyWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    //Actions Events for the class
     public void addActionsListeners() {
-        // final boolean active = this.begin;
+       
         box.addFocusListener(new FocusListener() {
             // No action takes place during focus Gain
             public void focusGained(FocusEvent e) {
@@ -174,7 +172,6 @@ class MyWindow extends JFrame {
                 getContentPane().add(secondBody, BorderLayout.CENTER); // Add the secondBody panel
                 revalidate(); // Re-layout components
                 repaint();
-
                 personalMsg.setText("Hi 👋 " + userName + "!");
 
             }
@@ -182,7 +179,7 @@ class MyWindow extends JFrame {
 
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Retrieve the selected tea type
+                
                 String selectedTeaType = null;
                 for (Enumeration<AbstractButton> buttons = optionGroup.getElements(); buttons.hasMoreElements();) {
                     AbstractButton button = buttons.nextElement();
@@ -227,7 +224,6 @@ class MyWindow extends JFrame {
         submitAnswer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int score = calculateScore();
-                // Display score on fourthBody panel
                 JLabel scoreLabel = new JLabel("Your score: " + score + " out of " + questions.size());
                 scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 scoreLabel.setForeground(Color.white);
@@ -249,9 +245,9 @@ class MyWindow extends JFrame {
                 System.exit(0);
             }
         });
-
     }
 
+    //Method displayes the quiz related to users option
     private void displayMatchaInfo(Matcha matcha) {
 
         // Display history label
@@ -264,7 +260,7 @@ class MyWindow extends JFrame {
         overviewLabel.setForeground(Color.white);
         overviewLabel.setBorder(BorderFactory.createEmptyBorder(13, 13, 13, 25));
 
-        // Adjust label width
+        
         Dimension preferredSize = historyLabel.getPreferredSize();
         int width = preferredSize.width > 500 ? 500 : preferredSize.width;
         historyLabel.setPreferredSize(new Dimension(width, preferredSize.height));
@@ -305,34 +301,27 @@ class MyWindow extends JFrame {
             }
         }
         thirdBody.add(submitAnswer);
-
-        // Update the layout of the thirdBody panel
         thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
-
-        // Add the thirdBody panel to the scrollPane
         scrollPane.setViewportView(thirdBody);
-
-        getContentPane().remove(secondBody); // Remove the secondBody panel
-        getContentPane().add(scrollPane, BorderLayout.CENTER); // Add the scrollPane to the center
-        revalidate(); // Re-layout components
+        getContentPane().remove(secondBody); 
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+        revalidate(); 
         repaint();
         personalMsg.setText("Hi 👋 " + userName + "!");
     }
 
+     //Method displayes the quiz related to users option
+    private void displayGyokuroInfo(Gyokuro gyokuro) {
 
-      private void displayGyokuroInfo(Gyokuro gyokuro) {
-
-        // Display history label
         JLabel historyLabel = new JLabel("History: " + gyokuro.getHistory());
         historyLabel.setForeground(Color.white);
         historyLabel.setBorder(BorderFactory.createEmptyBorder(30, 13, 28, 25));
 
-        // Display overview label
+        
         JLabel overviewLabel = new JLabel("Overview: " + gyokuro.getOverview());
         overviewLabel.setForeground(Color.white);
         overviewLabel.setBorder(BorderFactory.createEmptyBorder(13, 13, 13, 25));
 
-        // Adjust label width
         Dimension preferredSize = historyLabel.getPreferredSize();
         int width = preferredSize.width > 500 ? 500 : preferredSize.width;
         historyLabel.setPreferredSize(new Dimension(width, preferredSize.height));
@@ -341,7 +330,6 @@ class MyWindow extends JFrame {
         width = preferredSize.width > 500 ? 500 : preferredSize.width;
         overviewLabel.setPreferredSize(new Dimension(width, preferredSize.height));
 
-        // Add history and overview labels to the thirdBody panel
         thirdBody.add(historyLabel);
         thirdBody.add(overviewLabel);
 
@@ -372,24 +360,19 @@ class MyWindow extends JFrame {
                 }
             }
         }
+
         thirdBody.add(submitAnswer);
-
-        // Update the layout of the thirdBody panel
         thirdBody.setLayout(new BoxLayout(thirdBody, BoxLayout.Y_AXIS));
-
-        // Add the thirdBody panel to the scrollPane
         scrollPane.setViewportView(thirdBody);
 
-        getContentPane().remove(secondBody); // Remove the secondBody panel
-        getContentPane().add(scrollPane, BorderLayout.CENTER); // Add the scrollPane to the center
-        revalidate(); // Re-layout components
+        getContentPane().remove(secondBody); 
+        getContentPane().add(scrollPane, BorderLayout.CENTER); 
+        revalidate(); 
         repaint();
         personalMsg.setText("Hi 👋 " + userName + "!");
     }
 
-
-
-
+    //The method calculates the score based on options
     private int calculateScore() {
         int score = 0;
         int questionIndex = 0;
@@ -413,4 +396,4 @@ class MyWindow extends JFrame {
         }
         return score;
     }
-};
+}

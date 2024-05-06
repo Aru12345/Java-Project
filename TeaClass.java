@@ -1,10 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
 
+//The template abstract class produced a Tea Object with various labels and information.
 abstract class TeaClass {
     protected String history;
     protected String overview;
 
+    public TeaClass(){
+        System.out.println("0 args constructor");
+    }
     public TeaClass(String history, String overview) {
         this.history = history;
         this.overview = overview;
@@ -18,12 +22,14 @@ abstract class TeaClass {
         return this.history;
     }
 
+    //Abstract classes to provide base for the sub classes.
     public abstract List<String> getQuestions(int difficultyLevel);
     public abstract List<List<String>> getOptions(int difficultyLevel);
     public abstract List<Integer> getCorrectAnswers(int difficultyLevel);
 
 }
 
+//The class is extended from Tea Class and produces a matcha object with info related to it
 class Matcha extends TeaClass {
 
     private List<String> easyQuestions;
@@ -33,6 +39,13 @@ class Matcha extends TeaClass {
     private List<String> difficultQuestions;
     private List<List<String>> difficultOptions;
 
+    //0- arg Constructor
+    public Matcha(){
+        this("0","0");
+    }
+
+
+    //2-args constructor
     public Matcha(String history, String overview) {
         super(history, overview);
 
@@ -47,6 +60,7 @@ class Matcha extends TeaClass {
         initializeDifficultOptions();
     }
 
+    //List of easu questions in class
     private void initializeEasyQuestions() {
         easyQuestions = new ArrayList<>();
         easyQuestions.add("What is the first step in preparing Matcha Tea?");
@@ -54,7 +68,9 @@ class Matcha extends TeaClass {
         easyQuestions.add("What are the options to top off your tea with?");
     }
 
+    //Radio options for the easy questions
     private void initializeEasyOptions() {
+
         easyOptions = new ArrayList<>();
         List<String> q1Options = new ArrayList<>();
         q1Options.add("Sifting Matcha"); // Correct answer
@@ -75,8 +91,9 @@ class Matcha extends TeaClass {
         easyOptions.add(q3Options);
     }
 
+    //Medium questions for matcha
     private void initializeMediumQuestions() {
-        // Initialize medium questions
+        
         mediumQuestions = new ArrayList<>();
         mediumQuestions.add("What is the first step in preparing Matcha Tea?");
         mediumQuestions.add("What instrument is used to whisk matcha?");
@@ -85,8 +102,9 @@ class Matcha extends TeaClass {
         mediumQuestions.add("What are the options to top off your tea with?");
     }
 
+    //Radio options for medium questions
     private void initializeMediumOptions() {
-        // Initialize options for medium questions
+    
         mediumOptions = new ArrayList<>();
         List<String> q1Options = new ArrayList<>();
         q1Options.add("Sifting Matcha"); // Correct answer
@@ -120,8 +138,9 @@ class Matcha extends TeaClass {
 
     }
 
+    //Difficult questions for matcha
     private void initializeDifficultQuestions() {
-        // Initialize difficult questions
+        
         difficultQuestions = new ArrayList<>();
         difficultQuestions.add("What is the first step in preparing Matcha Tea?");
         difficultQuestions.add("What instrument is used to whisk matcha?");
@@ -133,8 +152,9 @@ class Matcha extends TeaClass {
 
     }
 
+    //Radio options for difficult questions
     private void initializeDifficultOptions() {
-        // Initialize options for difficult questions
+    
         difficultOptions = new ArrayList<>();
         List<String> q1Options = new ArrayList<>();
         q1Options.add("Sifting Mactha"); // Correct answer
@@ -224,12 +244,12 @@ class Matcha extends TeaClass {
                 break;
             case 3:
                 correctAnswers.add(0);
-                correctAnswers.add(2); // Index of correct answer in difficult questions
-                correctAnswers.add(2); // Index of correct answer in difficult questions
-                correctAnswers.add(0); // Index of correct answer in difficult questions
-                correctAnswers.add(1); // Index of correct answer in difficult questions
-                correctAnswers.add(1); // Index of correct answer in difficult questions
-                correctAnswers.add(2); // Index of correct answer in difficult questions
+                correctAnswers.add(2); 
+                correctAnswers.add(2); 
+                correctAnswers.add(0); 
+                correctAnswers.add(1); 
+                correctAnswers.add(1); 
+                correctAnswers.add(2); 
                 break;
             default:
                 break;
@@ -239,6 +259,7 @@ class Matcha extends TeaClass {
 
 }
 
+//Sub-class of Tea class produces Gyokuro obj
 class Gyokuro extends TeaClass {
 
     private List<String> easyQuestions;
@@ -248,11 +269,16 @@ class Gyokuro extends TeaClass {
     private List<String> difficultQuestions;
     private List<List<String>> difficultOptions;
 
+    //Zeo-arg constructor
+    public Gyokuro(){
+        this("0","0");
+    }
+
+    //2-arg construsctor
     public Gyokuro (String history, String overview) {
         super(history, overview);
 
         this.history  = "The history of gyokuro tea dates back to the 1830s when a tea merchant named Yamamoto Kahei was traveling around Japan and meeting with tea farmers. He noticed that some farmers covered tea plants with a netting to protect them from frost.He noticed that this shading had a profound effect & gave the leaves a sticky texture during the production process, producing a green residue. The tea was named gyokuroor jade dew.";
-        this.overview = "Japanese Matcha Tea is often made by sifting Matcha with a traditional Japanese Spoon.3000 milligrams.Matcha is whisked in a zig-zag manner in 176 fahrenheint.You can add your favourite sweetner to your tea.! ";
         this.overview = "With small cuttlery,Tea is served in a medium sized chawan.Use a small amount of tea leaves and pair with a nutty flavoured dessert.";
 
         initializeEasyQuestions();
@@ -291,8 +317,9 @@ class Gyokuro extends TeaClass {
         easyOptions.add(q3Options);
     }
 
+    //Method for medium questions
     private void initializeMediumQuestions() {
-        // Initialize medium questions
+    
         mediumQuestions = new ArrayList<>();
         mediumQuestions.add("What are the required tools for Gyokuru?");
         mediumQuestions.add("What quantity of chawan is used to prepare the water?");
@@ -301,8 +328,9 @@ class Gyokuro extends TeaClass {
         mediumQuestions.add("What are the options to top off your tea with?");
     }
 
+    // Radio options options for medium questions
     private void initializeMediumOptions() {
-        // Initialize options for medium questions
+        
         mediumOptions = new ArrayList<>();
         List<String> q1Options = new ArrayList<>();
         q1Options.add("Kyusu & Chawan"); // Correct answer
@@ -336,8 +364,9 @@ class Gyokuro extends TeaClass {
 
     }
 
+    //Initialize difficult questions
     private void initializeDifficultQuestions() {
-        // Initialize difficult questions
+     
         difficultQuestions = new ArrayList<>();
         difficultQuestions.add("What are the required tools for Gyokuru?");
         difficultQuestions.add("What quantity of chawan is used to prepare the water?");
@@ -349,8 +378,8 @@ class Gyokuro extends TeaClass {
 
     }
 
+    // Initialize options for difficult questions
     private void initializeDifficultOptions() {
-        // Initialize options for difficult questions
         difficultOptions = new ArrayList<>();
         List<String> q1Options = new ArrayList<>();
         q1Options.add("Kyusu and Chawan"); // Correct answer
@@ -441,8 +470,8 @@ class Gyokuro extends TeaClass {
             case 3:
                 correctAnswers.add(0);
                 correctAnswers.add(2); 
-                correctAnswers.add(2); // Index of correct answer in difficult questions
-                correctAnswers.add(0); // Index of correct answer in difficult questions
+                correctAnswers.add(2); 
+                correctAnswers.add(0); 
                 correctAnswers.add(1); 
                 correctAnswers.add(1); 
                 correctAnswers.add(2); 
@@ -452,5 +481,4 @@ class Gyokuro extends TeaClass {
         }
         return correctAnswers;
     }
-
 }
